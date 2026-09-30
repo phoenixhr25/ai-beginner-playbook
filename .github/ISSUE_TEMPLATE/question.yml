@@ -1,0 +1,43 @@
+name: 新手操作问题
+description: 提交一个真实遇到、希望整理成操作指南的问题
+title: "[问题] "
+labels: ["question", "needs-verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请勿提交密码、访问令牌、私人对话全文或未打码的个人信息。
+  - type: input
+    id: goal
+    attributes:
+      label: 你想完成什么？
+      placeholder: 例如：在 Codex 的某个项目里新建任务
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: 你看到了什么？
+      description: 请抄下按钮文字或完整报错，敏感信息需要打码。
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 使用环境
+      placeholder: 例如：macOS 15，Codex 桌面端
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: 已经尝试过什么？
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 隐私确认
+      options:
+        - label: 我已经删除密码、令牌、邮箱、私人路径和个人数据。
+          required: true

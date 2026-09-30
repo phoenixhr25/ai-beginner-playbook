@@ -1,0 +1,32 @@
+name: 内容纠错或过时报告
+description: 报告步骤失效、界面变化或事实错误
+title: "[纠错] "
+labels: ["correction", "needs-verification"]
+body:
+  - type: input
+    id: article
+    attributes:
+      label: 哪一篇文章？
+      placeholder: 粘贴文件链接或标题
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 哪一步不再适用？
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 使用环境
+      placeholder: 系统、应用和版本
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 可公开的证据
+      description: 可以提供打码后的报错、截图描述或官方资料链接。
+    validations:
+      required: false
