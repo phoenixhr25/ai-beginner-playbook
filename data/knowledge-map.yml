@@ -1,0 +1,151 @@
+version: 1
+updated: 2026-10-01
+
+stages:
+  - start
+  - organize
+  - connect
+  - publish
+  - troubleshoot
+  - backup
+  - feedback
+
+node_types:
+  - question
+  - procedure
+  - concept
+  - mental_model
+  - gap
+
+nodes:
+  - id: mental.layers
+    title: 本地文件、版本记录、远端仓库和线上服务是不同层
+    type: mental_model
+    stage: connect
+    status: published
+
+  - id: concept.files-folders
+    title: 文件、文件夹和项目路径
+    type: concept
+    stage: organize
+    status: published
+
+  - id: concept.codex-project
+    title: Codex 项目是固定工作目录
+    type: concept
+    stage: organize
+    status: published
+
+  - id: question.codex-new-task
+    title: 找不到 Codex 的新建任务按钮怎么办
+    type: question
+    stage: start
+    status: published
+    guide: 01-Codex/如何在项目中新建任务.md
+    verified: 2026-09-30
+
+  - id: question.codex-fixed-project
+    title: 如何把本地文件夹添加为 Codex 固定项目
+    type: question
+    stage: organize
+    status: published
+    guide: 01-Codex/Codex固定项目与Git迁移指南.md
+    verified: 2026-09-30
+
+  - id: concept.local-git
+    title: 本地 Git 保存版本历史与远端配置
+    type: concept
+    stage: connect
+    status: published
+
+  - id: concept.github-remote
+    title: GitHub 远端仓库与本地 Git 的关系
+    type: concept
+    stage: connect
+    status: published
+
+  - id: question.github-push-failed
+    title: GitHub 推送失败如何排查
+    type: question
+    stage: troubleshoot
+    status: published
+    guide: 02-GitHub/GitHub推送失败如何排查.md
+    verified: 2026-09-30
+
+  - id: question.github-device-code
+    title: GitHub 设备登录时错过验证码怎么办
+    type: question
+    stage: connect
+    status: verifying
+    issue: 1
+
+  - id: question.streamlit-deploy-disabled
+    title: Streamlit 的 Deploy 按钮为什么是灰色
+    type: question
+    stage: publish
+    status: verifying
+    issue: 2
+
+  - id: question.icloud-json
+    title: 手机导出的 JSON 如何移动到 iCloud 并在 Mac 找到
+    type: question
+    stage: backup
+    status: verifying
+    issue: 3
+
+  - id: question.license-choice
+    title: MIT 和 CC BY 4.0 有什么区别
+    type: question
+    stage: publish
+    status: verifying
+    issue: 4
+
+  - id: gap.repo-branch-entry
+    title: 仓库、分支和入口文件分别是什么
+    type: gap
+    stage: publish
+    status: gap
+    issue: 5
+
+  - id: gap.deploy-update
+    title: 部署成功后修改代码怎样更新线上版本
+    type: gap
+    stage: publish
+    status: gap
+    issue: 6
+
+  - id: gap.answer-feedback
+    title: 用户怎样反馈操作指南是否解决问题
+    type: gap
+    stage: feedback
+    status: gap
+    issue: 7
+
+edges:
+  - from: question.codex-new-task
+    to: concept.codex-project
+    relation: explains
+  - from: question.codex-fixed-project
+    to: concept.files-folders
+    relation: requires
+  - from: question.github-push-failed
+    to: concept.local-git
+    relation: explains
+  - from: question.github-push-failed
+    to: concept.github-remote
+    relation: explains
+  - from: concept.local-git
+    to: mental.layers
+    relation: explains
+  - from: concept.github-remote
+    to: mental.layers
+    relation: explains
+  - from: question.streamlit-deploy-disabled
+    to: gap.repo-branch-entry
+    relation: requires
+  - from: question.streamlit-deploy-disabled
+    to: gap.deploy-update
+    relation: next
+  - from: question.codex-new-task
+    to: gap.answer-feedback
+    relation: next
