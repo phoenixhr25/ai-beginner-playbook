@@ -1,5 +1,31 @@
-version: 1
-updated: 2026-10-01
+schema_version: 2
+updated: "2026-10-01"
+measurement_started: "2026-10-01"
+
+# 第二版从这一日期开始记录真实激活与反馈，不回填无法核实的历史数字。
+signal_defaults:
+  activation_count: 0
+  solved_count: 0
+  failed_count: 0
+  evidence_count: 0
+
+learning_rules:
+  propagation_decay: 0.70
+  recommendation_limit: 2
+  edge_weight:
+    minimum: 0.10
+    neutral: 0.50
+    maximum: 0.90
+    solved_delta: 0.10
+    partial_delta: 0.05
+    failed_delta: -0.10
+    independent_evidence_delta: 0.05
+  consolidation:
+    minimum_independent_cases: 2
+    requires_verified_guide: true
+  stale_content:
+    action: mark_for_reverification
+    decay_by_time_alone: false
 
 stages:
   - start
@@ -17,66 +43,89 @@ node_types:
   - mental_model
   - gap
 
+statuses:
+  - published
+  - verifying
+  - gap
+  - outdated
+
+relations:
+  - requires
+  - explains
+  - next
+  - same_root
+  - verified_by
+  - supersedes
+
 nodes:
   - id: mental.layers
     title: 本地文件、版本记录、远端仓库和线上服务是不同层
     type: mental_model
     stage: connect
     status: published
+    confidence: medium
 
   - id: concept.files-folders
     title: 文件、文件夹和项目路径
     type: concept
     stage: organize
     status: published
+    confidence: medium
 
   - id: concept.codex-project
     title: Codex 项目是固定工作目录
     type: concept
     stage: organize
     status: published
+    confidence: medium
 
   - id: question.codex-new-task
     title: 找不到 Codex 的新建任务按钮怎么办
     type: question
     stage: start
     status: published
+    confidence: medium
     guide: 01-Codex/如何在项目中新建任务.md
-    verified: 2026-09-30
+    last_verified: "2026-09-30"
 
   - id: question.codex-fixed-project
     title: 如何把本地文件夹添加为 Codex 固定项目
     type: question
     stage: organize
     status: published
+    confidence: medium
     guide: 01-Codex/Codex固定项目与Git迁移指南.md
-    verified: 2026-09-30
+    last_verified: "2026-09-30"
 
   - id: concept.local-git
     title: 本地 Git 保存版本历史与远端配置
     type: concept
     stage: connect
     status: published
+    confidence: medium
 
   - id: concept.github-remote
     title: GitHub 远端仓库与本地 Git 的关系
     type: concept
     stage: connect
     status: published
+    confidence: medium
 
   - id: question.github-push-failed
     title: GitHub 推送失败如何排查
     type: question
     stage: troubleshoot
     status: published
+    confidence: medium
     guide: 02-GitHub/GitHub推送失败如何排查.md
-    verified: 2026-09-30
+    last_verified: "2026-09-30"
 
   - id: question.github-device-code
     title: GitHub 设备登录时错过验证码怎么办
     type: question
     stage: connect
     status: verifying
+    confidence: low
     issue: 1
 
   - id: question.streamlit-deploy-disabled
@@ -84,6 +133,7 @@ nodes:
     type: question
     stage: publish
     status: verifying
+    confidence: low
     issue: 2
 
   - id: question.icloud-json
@@ -91,6 +141,7 @@ nodes:
     type: question
     stage: backup
     status: verifying
+    confidence: low
     issue: 3
 
   - id: question.license-choice
@@ -98,6 +149,7 @@ nodes:
     type: question
     stage: publish
     status: verifying
+    confidence: low
     issue: 4
 
   - id: gap.repo-branch-entry
@@ -105,6 +157,7 @@ nodes:
     type: gap
     stage: publish
     status: gap
+    confidence: low
     issue: 5
 
   - id: gap.deploy-update
@@ -112,6 +165,7 @@ nodes:
     type: gap
     stage: publish
     status: gap
+    confidence: low
     issue: 6
 
   - id: gap.answer-feedback
@@ -119,33 +173,60 @@ nodes:
     type: gap
     stage: feedback
     status: gap
+    confidence: low
     issue: 7
 
 edges:
   - from: question.codex-new-task
     to: concept.codex-project
     relation: explains
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.codex-fixed-project
     to: concept.files-folders
     relation: requires
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.github-push-failed
     to: concept.local-git
     relation: explains
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.github-push-failed
     to: concept.github-remote
     relation: explains
+    weight: 0.50
+    weight_basis: seed
+
   - from: concept.local-git
     to: mental.layers
     relation: explains
+    weight: 0.50
+    weight_basis: seed
+
   - from: concept.github-remote
     to: mental.layers
     relation: explains
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.streamlit-deploy-disabled
     to: gap.repo-branch-entry
     relation: requires
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.streamlit-deploy-disabled
     to: gap.deploy-update
     relation: next
+    weight: 0.50
+    weight_basis: seed
+
   - from: question.codex-new-task
     to: gap.answer-feedback
     relation: next
+    weight: 0.50
+    weight_basis: seed

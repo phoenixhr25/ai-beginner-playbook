@@ -1,0 +1,24 @@
+name: Validate knowledge map
+
+on:
+  push:
+    paths:
+      - "data/knowledge-map.yml"
+      - "scripts/validate_knowledge_map.rb"
+      - ".github/workflows/validate-knowledge-map.yml"
+  pull_request:
+    paths:
+      - "data/knowledge-map.yml"
+      - "scripts/validate_knowledge_map.rb"
+      - ".github/workflows/validate-knowledge-map.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate graph structure
+        run: ruby scripts/validate_knowledge_map.rb
