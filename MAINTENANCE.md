@@ -64,3 +64,15 @@
 - 产品源代码留在各自产品仓库；
 - 个人数据留在用户自己的备份位置；
 - 涉及高风险删除、覆盖和公开发布时，必须写明影响与备份方法。
+
+## 提交前检查
+
+将应公开的文件加入Git索引后，运行：
+
+```bash
+ruby scripts/validate_knowledge_map.rb
+python3 -m unittest discover -s tests -v
+python3 scripts/validate_local_links.py
+```
+
+GitHub的文档检查覆盖Markdown变动，因此删除或改名指南也会触发检查。链接检查只检查本仓库文件，不访问外部网站或验证标题锚点。独立的Sites源码目录保留在本机并由Sites管理；公开仓库只收录脱敏说明。

@@ -3,3 +3,8 @@
 .env
 .env.*
 !.env.example
+
+# 独立的Sites源码仓库与本机材料不提交到公开手册仓库
+/sites/
+__pycache__/
+*.pyc
